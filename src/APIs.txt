@@ -1,0 +1,18 @@
+login:
+
+Link: localhost:8000/login
+Content:
+{	
+	"username":"1805022"
+	"password":"Tam!m1902"
+}
+
+will result a sesskey
+
+Courses:
+Link: localhost:8000/courses
+Headers:
+sesskey:sessionkey
+Logout:
+Link: localhost:8000/logout
+Headers: sesskey:sessionkey
