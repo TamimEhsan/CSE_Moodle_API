@@ -197,7 +197,7 @@ router.get('/resource', (req, res) => {
 })
 
 router.get('/sitenews', (req, res) => {
-    var cookie = request.cookie('MoodleSession=' + req.headers['sesskey']) //+ req.headers['sesskey'])
+    //var cookie = request.cookie('MoodleSession=' + req.headers['sesskey']) // We don't need the sesskey to retrieve the site news! 
 
     const options = {
         url: 'https://cse.buet.ac.bd/moodle/mod/forum/view.php?id=114',
@@ -219,14 +219,14 @@ router.get('/sitenews', (req, res) => {
 			for(i=0;i<news.length;i++){
 				var object = new Object();
 				object['topic'] = news[i].querySelectorAll('[class="topic starter"]')[0].querySelectorAll('a')[0].innerHTML
-				object['link'] = news[i].querySelectorAll('[class="topic starter"]')[0].querySelectorAll('a')[0].href.split('=')[1]
+				object['id'] = news[i].querySelectorAll('[class="topic starter"]')[0].querySelectorAll('a')[0].href.split('=')[1]
 				object['author'] = news[i].querySelectorAll('[class="author"]')[0].querySelectorAll('a')[0].innerHTML
 				object['topic'] = news[i].querySelectorAll('[class="topic starter"]')[0].querySelectorAll('a')[0].innerHTML
 				object['time'] = news[i].querySelectorAll('[class="lastpost"]')[0].querySelectorAll('a')[1].innerHTML
 				
 				sitenews.push(object);
 			}
-			/*var objects = new Object();
+			/*var objects = new Object(); // It will be used to fetch the other 3 pages.
 			for(i=0;i<pages.length-1;i++){
 				objects[i] = pages[i].href;
 			}*/
@@ -238,7 +238,7 @@ router.get('/sitenews', (req, res) => {
 })
 
 router.get('/sitenews/:id', (req, res) => {
-    var cookie = request.cookie('MoodleSession=' + req.headers['sesskey']) //+ req.headers['sesskey'])
+    //var cookie = request.cookie('MoodleSession=' + req.headers['sesskey']) //+ req.headers['sesskey'])
 
     const options = {
         url: 'https://cse.buet.ac.bd/moodle/mod/forum/discuss.php?d='+req.params.id,
@@ -253,7 +253,7 @@ router.get('/sitenews/:id', (req, res) => {
         } else {
             const dom = new JSDOM(body)
 			const forumposts = dom.window.document.querySelectorAll('[class^="forumpost"]');
-			console.log(forumposts.length);
+			//console.log(forumposts.length);
 			var posts = [];
 			for(i=0;i<forumposts.length;i++){
 				var object = new Object();
@@ -261,6 +261,7 @@ router.get('/sitenews/:id', (req, res) => {
 				//console.log(object['title']);
 				object['author'] = forumposts[i].querySelectorAll('[class="author"] a')[0].innerHTML;
 				object['time'] = forumposts[i].querySelectorAll('[class="author"]')[0].innerHTML.split('-')[1];
+				object['desc'] = forumposts[i].querySelectorAll('[class="posting fullpost"]')[0].innerHTML;
 				var attachments = [];
 				const attach = forumposts[i].querySelectorAll('[class="attachments"] a');
 				if( attach!=undefined){
